@@ -1,5 +1,6 @@
 # Redmine issue_mail_with_attachments plugin
-[![Build Status](https://travis-ci.org/vosifei/testci.svg?branch=master)](https://travis-ci.org/vosifei/testci)
+[![Build Status](https://travis-ci.org/vosifei/testci.svg?branch=onlyforpj)](https://travis-ci.org/vosifei/testci)
+[![Coverage Status](https://coveralls.io/repos/github/vosifei/testci/badge.svg?branch=onlyforpj)](https://coveralls.io/github/vosifei/testci?branch=onlyforpj)
 
 With this plugin, you can send out newly attached files on issues via usual issue notification mails or dedicated mails as attachments.
 
