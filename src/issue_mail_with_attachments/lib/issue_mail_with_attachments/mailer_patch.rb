@@ -13,18 +13,9 @@ module IssueMailWithAttachments
 
     module InstanceMethods
       #=========================================================
-      # monkey patch for issue_add method of Mailer class
+      # helper method to retrieve plugin settings
       #=========================================================
-      def issue_add_with_attachments(issue, to_users, cc_users)
-        prev_logger_lvl = nil
-        prev_logger_lvl = Rails.logger.level
-        Rails.logger.level = Logger::DEBUG
-        Rails.logger.debug "--- def issue_add_with_attachments ------"
-        #------------------------------------------------------------
-        # call original method
-        #------------------------------------------------------------
-        ml = issue_add_without_attachments(issue, to_users, cc_users)
-
+      def retrieve_plugin_settings(issue)
         #------------------------------------------------------------
         # evaluate plugin settings
         #------------------------------------------------------------
@@ -39,21 +30,48 @@ module IssueMailWithAttachments
         prj_ctl_enabled = Setting.plugin_issue_mail_with_attachments['enable_project_level_control'].to_s.eql?('true') ? true : false
 
         # plugin setting value: custom filed name for issue level control
-        enabled_for_issue = true
+        enabled_for_issue = nil
         cf_name_for_issue = Setting.plugin_issue_mail_with_attachments['field_name_to_enable_att']
         if cf_name_for_issue
           cf = issue.custom_field_values.detect {|c| c.custom_field.name == cf_name_for_issue}
           if cf
             Rails.logger.debug "cf.value: #{cf.value}"
-            enabled_for_issue = false unless cf.value.to_s.eql?('1')
+            enabled_for_issue = true if cf.value.to_s.eql?('1')
           end
         end
-
+        return att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue
+      end
+      
+      #=========================================================
+      # helper method to evaluate mail with attachment or not
+      #=========================================================
+      def evaluate_attach_or_not(att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue)
         with_att = true
         with_att = false unless att_enabled
-        with_att = false if mod_enabled == false and prj_ctl_enabled == true
-        with_att = false unless enabled_for_issue
-        Rails.logger.debug "******  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}, prj_ctl_enabled: #{prj_ctl_enabled}, cf_name_for_issue: #{cf_name_for_issue}, enabled_for_issue: #{enabled_for_issue}"
+        with_att = false if mod_enabled != true and prj_ctl_enabled == true
+        with_att = false if cf_name_for_issue and enabled_for_issue != true
+        Rails.logger.debug "****  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}, prj_ctl_enabled: #{prj_ctl_enabled}, cf_name_for_issue: #{cf_name_for_issue}, enabled_for_issue: #{enabled_for_issue}"
+        return with_att
+      end
+      
+      #=========================================================
+      # monkey patch for issue_add method of Mailer class
+      #=========================================================
+      def issue_add_with_attachments(issue, to_users, cc_users)
+        prev_logger_lvl = nil
+        prev_logger_lvl = Rails.logger.level
+        Rails.logger.level = Logger::DEBUG
+        Rails.logger.info "--- def issue_add_with_attachments ------"
+        #------------------------------------------------------------
+        # call original method
+        #------------------------------------------------------------
+        ml = issue_add_without_attachments(issue, to_users, cc_users)
+
+        #------------------------------------------------------------
+        # evaluate plugin settings
+        #------------------------------------------------------------
+        att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue = retrieve_plugin_settings(issue)
+        with_att = evaluate_attach_or_not(att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue)
         
         # little bit tricky way, really work ... ?
         initialize
@@ -97,7 +115,7 @@ module IssueMailWithAttachments
           # send mail with attachments
           #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
-              Rails.logger.debug "***  att with notification: #{attachment.filename}"
+              Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
               initialize
               attachments[attachment.filename] = File.binread(attachment.diskfile)
@@ -135,7 +153,7 @@ module IssueMailWithAttachments
         prev_logger_lvl = nil
         prev_logger_lvl = Rails.logger.level
         Rails.logger.level = Logger::DEBUG
-        Rails.logger.debug "--- def issue_edit_with_attachments ------"
+        Rails.logger.info "--- def issue_edit_with_attachments ------"
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
@@ -145,32 +163,8 @@ module IssueMailWithAttachments
         #------------------------------------------------------------
         # evaluate plugin settings
         #------------------------------------------------------------
-        # plugin setting value: enable/disable file attachments
-        att_enabled = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
-        # plugin setting value: attach all files on original notification mail
-        attach_all = Setting.plugin_issue_mail_with_attachments['attach_all_to_notification'].to_s.eql?('true') ? true : false
-
-        # project level plugin setting: enabled/disabled as project module setting
-        mod_enabled = issue.project.module_enabled?("issue_mail_with_attachments_plugin")
-        # plugin setting value: enable/disable project level control
-        prj_ctl_enabled = Setting.plugin_issue_mail_with_attachments['enable_project_level_control'].to_s.eql?('true') ? true : false
-
-        # plugin setting value: custom filed name for issue level control
-        enabled_for_issue = true
-        cf_name_for_issue = Setting.plugin_issue_mail_with_attachments['field_name_to_enable_att']
-        if cf_name_for_issue
-          cf = issue.custom_field_values.detect {|c| c.custom_field.name == cf_name_for_issue}
-          if cf
-            Rails.logger.debug "cf.value: #{cf.value}"
-            enabled_for_issue = false unless cf.value.to_s.eql?('1')
-          end
-        end
-
-        with_att = true
-        with_att = false unless att_enabled
-        with_att = false if mod_enabled == false and prj_ctl_enabled == true
-        with_att = false unless enabled_for_issue
-        Rails.logger.debug "******  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}, prj_ctl_enabled: #{prj_ctl_enabled}, cf_name_for_issue: #{cf_name_for_issue}, enabled_for_issue: #{enabled_for_issue}"
+        att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue = retrieve_plugin_settings(issue)
+        with_att = evaluate_attach_or_not(att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue)
 
         # little bit tricky way, really work ... ?
         initialize
@@ -224,7 +218,7 @@ module IssueMailWithAttachments
           #unless Setting.plain_text_mail?
             journal.details.each do |detail|
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
-                Rails.logger.debug "***  att with dedicate mail: #{attachment.filename}"
+                Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
                 # little bit tricky way, really work ... ?
                 initialize
