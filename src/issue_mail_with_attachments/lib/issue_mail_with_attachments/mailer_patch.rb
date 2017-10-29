@@ -94,15 +94,15 @@ module IssueMailWithAttachments
         # mail
         #-----------
         # note: overwrite original mail method ... work ?
-        if Redmine::VERSION::MAJOR == 2
-          ml = mail :to => to_users.map(&:mail),
-           :cc => cc_users.map(&:mail),
-           :subject => s
-        else                      # for feature #4244, from redmine v3.0.0
+        #if Redmine::VERSION::MAJOR == 2
+        #  ml = mail :to => to_users.map(&:mail),
+        #   :cc => cc_users.map(&:mail),
+        #   :subject => s
+        #else                      # for feature #4244, from redmine v3.0.0
           ml = mail :to => to_users,
            :cc => cc_users,
            :subject => s
-        end
+        #end
         
         #------------------------------------------------------------
         # send each files on dedicated mails
@@ -123,15 +123,15 @@ module IssueMailWithAttachments
               #-----------
               # mail
               #-----------
-              if Redmine::VERSION::MAJOR == 2
-                ml = mail( :to => to_users.map(&:mail),
-                  :cc => cc_users.map(&:mail),
-                  :subject => sss
-                ) do |format|
-                  format.text { render plain: attachment.filename }
-                  format.html { render html: "#{attachment.filename}".html_safe }
-                end
-              else                      # for feature #4244, from redmine v3.0.0
+              #if Redmine::VERSION::MAJOR == 2
+              #  ml = mail( :to => to_users.map(&:mail),
+              #    :cc => cc_users.map(&:mail),
+              #    :subject => sss
+              #  ) do |format|
+              #    format.text { render plain: attachment.filename }
+              #    format.html { render html: "#{attachment.filename}".html_safe }
+              #  end
+              #else                      # for feature #4244, from redmine v3.0.0
                 ml = mail( :to => to_users,
                   :cc => cc_users,
                   :subject => sss
@@ -139,7 +139,7 @@ module IssueMailWithAttachments
                   format.text { render plain: attachment.filename }
                   format.html { render html: "#{attachment.filename}".html_safe }
                 end
-              end
+              #end
             end
           #end
         end
@@ -196,15 +196,15 @@ module IssueMailWithAttachments
         # mail
         #-----------
         # note: overwrite original mail method ... work ?
-        if Redmine::VERSION::MAJOR == 2
-          ml = mail :to => to_users.map(&:mail),
-           :cc => cc_users.map(&:mail),
-           :subject => s
-        else                      # for feature #4244, from redmine v3.0.0
+        #if Redmine::VERSION::MAJOR == 2
+        #  ml = mail :to => to_users.map(&:mail),
+        #   :cc => cc_users.map(&:mail),
+        #   :subject => s
+        #else                      # for feature #4244, from redmine v3.0.0
           ml = mail :to => to_users,
            :cc => cc_users,
            :subject => s
-        end
+        #end
         #------------------------------------------------------------
         # send each files on dedicated mails
         #------------------------------------------------------------
@@ -227,15 +227,15 @@ module IssueMailWithAttachments
                 #-----------
                 # mail
                 #-----------
-                if Redmine::VERSION::MAJOR == 2
-                  ml = mail( :to => to_users.map(&:mail),
-                    :cc => cc_users.map(&:mail),
-                    :subject => sss
-                  ) do |format|
-                    format.text { render plain: attachment.filename }
-                    format.html { render html: "#{attachment.filename}".html_safe }
-                  end
-                else                      # for feature #4244, from redmine v3.0.0
+                #if Redmine::VERSION::MAJOR == 2
+                #  ml = mail( :to => to_users.map(&:mail),
+                #    :cc => cc_users.map(&:mail),
+                #    :subject => sss
+                #  ) do |format|
+                #    format.text { render plain: attachment.filename }
+                #    format.html { render html: "#{attachment.filename}".html_safe }
+                #  end
+                #else                      # for feature #4244, from redmine v3.0.0
                   ml = mail( :to => to_users,
                     :cc => cc_users,
                     :subject => sss
@@ -243,7 +243,7 @@ module IssueMailWithAttachments
                     format.text { render plain: attachment.filename }
                     format.html { render html: "#{attachment.filename}".html_safe }
                   end
-                end
+                #end
               end
             end
           #end

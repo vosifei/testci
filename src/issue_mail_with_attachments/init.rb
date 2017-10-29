@@ -17,11 +17,11 @@ default_settings = {
     :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
 }
 
-if Redmine::VERSION::MAJOR == 2
-  default_settings = HashWithIndifferentAccess.new(default_settings)
-else
+#if Redmine::VERSION::MAJOR == 2
+#  default_settings = HashWithIndifferentAccess.new(default_settings)
+#else
   default_settings = ActionController::Parameters.new(default_settings)
-end
+#end
 
 Redmine::Plugin.register :issue_mail_with_attachments do
   name 'Issue Mail With Attachments plugin'

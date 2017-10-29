@@ -9,7 +9,6 @@ env:
   - REDMINE_VERSION=3.4-stable VERBOSE=yes
 #  - REDMINE_VERSION=3.3-stable VERBOSE=yes
 #  - REDMINE_VERSION=3.2-stable VERBOSE=yes
-  - REDMINE_VERSION=2.6.10 VERBOSE=yes
 script:
   - export PLUGIN=issue_mail_with_attachments
   - export WORKSPACE=$(pwd)/workspace
