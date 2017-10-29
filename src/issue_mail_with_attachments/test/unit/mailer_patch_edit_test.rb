@@ -14,21 +14,71 @@ class MailPatchEditTest < ActiveSupport::TestCase
            :enumerations,
            :issues, :journals, :journal_details,
            :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values,
-           :time_entries
+           :time_entries,
+           :attachments
 
   def setup
   end
   
-  def test_create_should_send_email_notification
-    ActionMailer::Base.deliveries.clear
-    issue = Issue.first
+  def generate_journal_with_attachment_001(num=3)
+    issue = Issue.find(3)
     user = User.first
-    journal = issue.init_journal(user, issue)
     
-    
+    att_files = [
+      ["testfile.txt", "text/plain"],
+      ["2010/11/101123161450_testfile_1.png", "image/png"],
+      ["japanese-utf-8.txt", "text/plain"]
+      ]
 
-    assert journal.save
-    assert_equal 1, ActionMailer::Base.deliveries.size
+    journals = []
+    atts = []
+    (0..num -1).each do |idx|
+      att = Attachment.new(
+                       :file => uploaded_test_file(att_files[idx][0], att_files[idx][1]),
+                       :author_id => 3
+                     )
+      assert att.save
+      atts << att
+      journal = issue.init_journal(user, issue)
+      journal.journalize_attachment(att, :added)
+      journals << journal
+    end
+
+    return issue, journals, atts
+  end
+  
+  def test_edit__att_enabled_true__attach_all_false
+    ActionMailer::Base.deliveries.clear
+    issue, = generate_journal_with_attachment_001
+    
+    plugin_settings = plugin_settings_init({
+      :enable_mail_attachments => 'true',
+      :attach_all_to_notification => 'false'
+    })
+
+    with_settings( {:notified_events => %w(issue_added issue_updated),
+      :plugin_issue_mail_with_attachments => plugin_settings
+    }) do
+      assert issue.save
+      assert_sent_with_dedicated_mails
+    end
+  end
+  
+  def test_add__att_enabled_true__attach_all_true
+    ActionMailer::Base.deliveries.clear
+    issue, = generate_journal_with_attachment_001
+    
+    plugin_settings = plugin_settings_init({
+      :enable_mail_attachments => 'true',
+      :attach_all_to_notification => 'true'
+    })
+
+    with_settings( {:notified_events => %w(issue_added issue_updated),
+      :plugin_issue_mail_with_attachments => plugin_settings
+    }) do
+      assert issue.save
+      assert_sent_with_attach_all
+    end
   end
   
   
