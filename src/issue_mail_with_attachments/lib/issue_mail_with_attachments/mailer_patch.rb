@@ -27,8 +27,7 @@ module IssueMailWithAttachments
       # helper method to retrieve plugin setting
       #=========================================================
       def retrieve_plugin_seting(name)
-        s = Setting.plugin_issue_mail_with_attachments[name]
-		s
+        return Setting.plugin_issue_mail_with_attachments[name]
       end
       
       #=========================================================
@@ -39,10 +38,21 @@ module IssueMailWithAttachments
         return eval("\"#{v}\"")
       end
 
+      #=========================================================
+      # helper method to retrieve a plugin setting
+      #=========================================================
+
       def retrieve_plugin_seting(name)
         return Setting.plugin_issue_mail_with_attachments[name]
       end
 
+      #=========================================================
+      # helper class to store arguments
+      #=========================================================
+      class PluginSettings
+        attr_accessor :att_enabled, :attach_all, :prj_ctl_enabled, :mod_enabled, :cf_name_for_issue, :enabled_for_issue
+      end
+      
       #=========================================================
       # helper method to retrieve plugin settings
       #=========================================================
@@ -74,18 +84,29 @@ module IssueMailWithAttachments
             end
           end
         end
-        return att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue
+        ps = PluginSettings.new
+        ps.att_enabled = att_enabled
+        ps.attach_all = attach_all
+        ps.prj_ctl_enabled = prj_ctl_enabled
+        ps.mod_enabled = mod_enabled
+        ps.cf_name_for_issue = cf_name_for_issue
+        ps.enabled_for_issue = enabled_for_issue
+        ps
       end
       
+      class Hoge
+  attr_accessor :foo
+end
+
       #=========================================================
       # helper method to evaluate mail with attachment or not
       #=========================================================
-      def evaluate_attach_or_not(att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue)
+      def evaluate_attach_or_not(ps)
         with_att = true
-        with_att = false unless att_enabled
-        with_att = false if mod_enabled != true and prj_ctl_enabled == true
-        with_att = false if cf_name_for_issue and enabled_for_issue == false
-        Rails.logger.debug "****  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}, prj_ctl_enabled: #{prj_ctl_enabled}, cf_name_for_issue: #{cf_name_for_issue}, enabled_for_issue: #{enabled_for_issue}"
+        with_att = false unless ps.att_enabled
+        with_att = false if ps.mod_enabled != true and ps.prj_ctl_enabled == true
+        with_att = false if ps.cf_name_for_issue and ps.enabled_for_issue == false
+        Rails.logger.debug "****  with_att:#{with_att}, att_enabled: #{ps.att_enabled}, attach_all: #{ps.attach_all}, mod_enabled: #{ps.mod_enabled}, prj_ctl_enabled: #{ps.prj_ctl_enabled}, cf_name_for_issue: #{ps.cf_name_for_issue}, enabled_for_issue: #{ps.enabled_for_issue}"
         return with_att
       end
       
@@ -120,15 +141,15 @@ module IssueMailWithAttachments
         #------------------------------------------------------------
         # evaluate plugin settings
         #------------------------------------------------------------
-        att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue = retrieve_plugin_settings(issue)
-        with_att = evaluate_attach_or_not(att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue)
+        ps = retrieve_plugin_settings(issue)
+        with_att = evaluate_attach_or_not(ps)
         
         # little bit tricky way, really work ... ?
         initialize
         #------------------------------------------------------------
         # attach all files on original notification mail
         #------------------------------------------------------------
-        if attach_all == true and with_att == true
+        if ps.attach_all == true and with_att == true
           #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
               Rails.logger.debug "***  att with notification: #{attachment.filename}"
@@ -149,7 +170,7 @@ module IssueMailWithAttachments
         #------------------------------------------------------------
         # send each files on dedicated mails
         #------------------------------------------------------------
-        if attach_all == false and with_att == true
+        if ps.attach_all == false and with_att == true
           # plugin setting value: mail subject for attachment
           title2 = retrieve_plugin_seting('mail_subject_4_attachment')
           title2 = eval("\"#{title2}\"")
@@ -181,15 +202,15 @@ module IssueMailWithAttachments
         #------------------------------------------------------------
         # evaluate plugin settings
         #------------------------------------------------------------
-        att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue = retrieve_plugin_settings(issue)
-        with_att = evaluate_attach_or_not(att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue)
+        ps = retrieve_plugin_settings(issue)
+        with_att = evaluate_attach_or_not(ps)
 
         # little bit tricky way, really work ... ?
         initialize
         #------------------------------------------------------------
         # attach all files on original notification mail
         #------------------------------------------------------------
-        if attach_all == true and with_att == true
+        if ps.attach_all == true and with_att == true
           #unless Setting.plain_text_mail?
             journal.details.each do |detail|
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
@@ -215,7 +236,7 @@ module IssueMailWithAttachments
         #------------------------------------------------------------
         # send each files on dedicated mails
         #------------------------------------------------------------
-        if attach_all == false and with_att == true
+        if ps.attach_all == false and with_att == true
           # plugin setting value: mail subject for attachment
           title2 = retrieve_plugin_seting('mail_subject_4_attachment')
           title2 = eval("\"#{title2}\"")
