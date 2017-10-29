@@ -1,4 +1,4 @@
-# aaaaaaaaaaaaa sample_model_test.rb - test
+
 require File.expand_path('../../test_helper', __FILE__)
 
 class SampleModelTest < ActiveSupport::TestCase

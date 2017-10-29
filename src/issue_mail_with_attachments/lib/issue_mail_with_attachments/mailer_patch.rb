@@ -12,6 +12,36 @@ module IssueMailWithAttachments
     end
 
     module InstanceMethods
+
+      #=========================================================
+      # helper method to set logger level
+      #=========================================================
+      def set_logger_level()
+        prev = nil
+        prev = Rails.logger.level
+        Rails.logger.level = Logger::DEBUG
+        return prev
+      end
+
+      #=========================================================
+      # helper method to retrieve plugin setting
+      #=========================================================
+      def retrieve_plugin_seting(name)
+        return Setting.plugin_issue_mail_with_attachments[name]
+      end
+      
+      #=========================================================
+      # helper method to retrieve plugin setting
+      #=========================================================
+      def retrieve_and_eval_plugin_seting(issue, name)
+        v = retrieve_plugin_seting(name)
+        return eval("\"#{v}\"")
+      end
+
+      def retrieve_plugin_seting(name)
+        return Setting.plugin_issue_mail_with_attachments[name]
+      end
+
       #=========================================================
       # helper method to retrieve plugin settings
       #=========================================================
@@ -20,23 +50,27 @@ module IssueMailWithAttachments
         # evaluate plugin settings
         #------------------------------------------------------------
         # plugin setting value: enable/disable file attachments
-        att_enabled = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
+        att_enabled = retrieve_plugin_seting('enable_mail_attachments').to_s.eql?('true') ? true : false
         # plugin setting value: attach all files on original notification mail
-        attach_all = Setting.plugin_issue_mail_with_attachments['attach_all_to_notification'].to_s.eql?('true') ? true : false
+        attach_all = retrieve_plugin_seting('attach_all_to_notification').to_s.eql?('true') ? true : false
 
         # project level plugin setting: enabled/disabled as project module setting
         mod_enabled = issue.project.module_enabled?("issue_mail_with_attachments_plugin")
         # plugin setting value: enable/disable project level control
-        prj_ctl_enabled = Setting.plugin_issue_mail_with_attachments['enable_project_level_control'].to_s.eql?('true') ? true : false
+        prj_ctl_enabled = retrieve_plugin_seting('enable_project_level_control').to_s.eql?('true') ? true : false
 
         # plugin setting value: custom filed name for issue level control
         enabled_for_issue = nil
-        cf_name_for_issue = Setting.plugin_issue_mail_with_attachments['field_name_to_enable_att']
+        cf_name_for_issue = retrieve_plugin_seting('field_name_to_enable_att')
         if cf_name_for_issue
           cf = issue.custom_field_values.detect {|c| c.custom_field.name == cf_name_for_issue}
           if cf
             Rails.logger.debug "cf.value: #{cf.value}"
-            enabled_for_issue = true if cf.value.to_s.eql?('1')
+            if cf.value.to_s.eql?('1')
+              enabled_for_issue = true
+            else
+              enabled_for_issue = false
+            end
           end
         end
         return att_enabled, attach_all, prj_ctl_enabled, mod_enabled, cf_name_for_issue, enabled_for_issue
@@ -49,18 +83,33 @@ module IssueMailWithAttachments
         with_att = true
         with_att = false unless att_enabled
         with_att = false if mod_enabled != true and prj_ctl_enabled == true
-        with_att = false if cf_name_for_issue and enabled_for_issue != true
+        with_att = false if cf_name_for_issue and enabled_for_issue == false
         Rails.logger.debug "****  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}, prj_ctl_enabled: #{prj_ctl_enabled}, cf_name_for_issue: #{cf_name_for_issue}, enabled_for_issue: #{enabled_for_issue}"
         return with_att
+      end
+      
+      #=========================================================
+      # send with dedicated mail
+      #=========================================================
+      def send_with_dedicated_mail(to_users, cc_users, title, attachment)
+        initialize
+        attachments[attachment.filename] = File.binread(attachment.diskfile)
+        new_title = title + attachment.filename
+        ml = mail( :to => to_users,
+          :cc => cc_users,
+          :subject => new_title
+        ) do |format|
+          format.text { render plain: attachment.filename }
+          format.html { render html: "#{attachment.filename}".html_safe }
+        end
+        return ml
       end
       
       #=========================================================
       # monkey patch for issue_add method of Mailer class
       #=========================================================
       def issue_add_with_attachments(issue, to_users, cc_users)
-        prev_logger_lvl = nil
-        prev_logger_lvl = Rails.logger.level
-        Rails.logger.level = Logger::DEBUG
+        prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_add_with_attachments ------"
         #------------------------------------------------------------
         # call original method
@@ -87,59 +136,29 @@ module IssueMailWithAttachments
           #end
         end
         # plugin setting value: mail subject
-        s = Setting.plugin_issue_mail_with_attachments['mail_subject']
-        s = eval("\"#{s}\"")
-#        s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}"
+        title = retrieve_and_eval_plugin_seting(issue, 'mail_subject')
+
         #-----------
         # mail
         #-----------
-        # note: overwrite original mail method ... work ?
-        #if Redmine::VERSION::MAJOR == 2
-        #  ml = mail :to => to_users.map(&:mail),
-        #   :cc => cc_users.map(&:mail),
-        #   :subject => s
-        #else                      # for feature #4244, from redmine v3.0.0
-          ml = mail :to => to_users,
-           :cc => cc_users,
-           :subject => s
-        #end
+        ml = mail :to => to_users,
+         :cc => cc_users,
+         :subject => title
         
         #------------------------------------------------------------
         # send each files on dedicated mails
         #------------------------------------------------------------
         if attach_all == false and with_att == true
           # plugin setting value: mail subject for attachment
-          ss = Setting.plugin_issue_mail_with_attachments['mail_subject_4_attachment']
-          ss = eval("\"#{ss}\"")
-#          ss = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| "
+          title2 = retrieve_plugin_seting('mail_subject_4_attachment')
+          title2 = eval("\"#{title2}\"")
+
           # send mail with attachments
           #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
               Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
-              initialize
-              attachments[attachment.filename] = File.binread(attachment.diskfile)
-              sss = ss + attachment.filename
-              #-----------
-              # mail
-              #-----------
-              #if Redmine::VERSION::MAJOR == 2
-              #  ml = mail( :to => to_users.map(&:mail),
-              #    :cc => cc_users.map(&:mail),
-              #    :subject => sss
-              #  ) do |format|
-              #    format.text { render plain: attachment.filename }
-              #    format.html { render html: "#{attachment.filename}".html_safe }
-              #  end
-              #else                      # for feature #4244, from redmine v3.0.0
-                ml = mail( :to => to_users,
-                  :cc => cc_users,
-                  :subject => sss
-                ) do |format|
-                  format.text { render plain: attachment.filename }
-                  format.html { render html: "#{attachment.filename}".html_safe }
-                end
-              #end
+              ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
             end
           #end
         end
@@ -150,9 +169,7 @@ module IssueMailWithAttachments
       # monkey patch for issue_edit method of Mailer class
       #=========================================================
       def issue_edit_with_attachments(journal, to_users, cc_users)
-        prev_logger_lvl = nil
-        prev_logger_lvl = Rails.logger.level
-        Rails.logger.level = Logger::DEBUG
+        prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_edit_with_attachments ------"
         #------------------------------------------------------------
         # call original method
@@ -183,35 +200,24 @@ module IssueMailWithAttachments
         end
         if journal.new_value_for('status_id')
           # plugin setting value: mail subject
-          s = Setting.plugin_issue_mail_with_attachments['mail_subject']
-          s = eval("\"#{s}\"")
-#          s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}"
+          title = retrieve_and_eval_plugin_seting(issue, 'mail_subject')
         else
           # plugin setting value: mail subject without status
-          s = Setting.plugin_issue_mail_with_attachments['mail_subject_wo_status']
-          s = eval("\"#{s}\"")
-#          s = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}"
+          title = retrieve_and_eval_plugin_seting(issue, 'mail_subject_wo_status')
         end
         #-----------
         # mail
         #-----------
-        # note: overwrite original mail method ... work ?
-        #if Redmine::VERSION::MAJOR == 2
-        #  ml = mail :to => to_users.map(&:mail),
-        #   :cc => cc_users.map(&:mail),
-        #   :subject => s
-        #else                      # for feature #4244, from redmine v3.0.0
-          ml = mail :to => to_users,
-           :cc => cc_users,
-           :subject => s
-        #end
+        ml = mail :to => to_users,
+         :cc => cc_users,
+         :subject => title
         #------------------------------------------------------------
         # send each files on dedicated mails
         #------------------------------------------------------------
         if attach_all == false and with_att == true
           # plugin setting value: mail subject for attachment
-          ss = Setting.plugin_issue_mail_with_attachments['mail_subject_4_attachment']
-          ss = eval("\"#{ss}\"")
+          title2 = retrieve_plugin_seting('mail_subject_4_attachment')
+          title2 = eval("\"#{title2}\"")
 #          ss = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| "
 
           # send mail with attachments
@@ -220,30 +226,7 @@ module IssueMailWithAttachments
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
                 Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
-                # little bit tricky way, really work ... ?
-                initialize
-                attachments[attachment.filename] = File.binread(attachment.diskfile)
-                sss = ss + attachment.filename
-                #-----------
-                # mail
-                #-----------
-                #if Redmine::VERSION::MAJOR == 2
-                #  ml = mail( :to => to_users.map(&:mail),
-                #    :cc => cc_users.map(&:mail),
-                #    :subject => sss
-                #  ) do |format|
-                #    format.text { render plain: attachment.filename }
-                #    format.html { render html: "#{attachment.filename}".html_safe }
-                #  end
-                #else                      # for feature #4244, from redmine v3.0.0
-                  ml = mail( :to => to_users,
-                    :cc => cc_users,
-                    :subject => sss
-                  ) do |format|
-                    format.text { render plain: attachment.filename }
-                    format.html { render html: "#{attachment.filename}".html_safe }
-                  end
-                #end
+                ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
               end
             end
           #end

@@ -1,9 +1,9 @@
-# encoding: utf-8# encoding: utf-8# encoding: utf-8
+
 require File.expand_path('../../test_helper', __FILE__)
 
 class MailPatchTest < ActiveSupport::TestCase
   include Redmine::I18n
-#  include Rails::Dom::Testing::Assertions
+  include Rails::Dom::Testing::Assertions
 
   fixtures :projects, :issues, :issue_statuses, :journals, :journal_details,
            :issue_relations, :workflows,
