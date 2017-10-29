@@ -71,12 +71,20 @@ class MailPatchTest < ActiveSupport::TestCase
     )
     return issue, atts
   end
+  
+  def settings_init(raw_settings)
+    if Redmine::VERSION::MAJOR == 2
+      return HashWithIndifferentAccess.new(raw_settings)
+    else
+      return ActionController::Parameters.new(raw_settings)
+    end
+  end
 
   def test_add__att_nabled_true__attach_all_false
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false'
     })
@@ -101,7 +109,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true'
     })
@@ -120,7 +128,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'false',
       :attach_all_to_notification => 'false'
     })
@@ -139,7 +147,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'false',
       :attach_all_to_notification => 'true'
     })
@@ -158,7 +166,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true'
@@ -178,7 +186,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true'
@@ -209,7 +217,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true',
       :enable_project_level_control => 'true'
@@ -229,7 +237,7 @@ class MailPatchTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     issue, = generate_issue_with_attachment_001
     
-    plugin_settings = ActionController::Parameters.new({
+    plugin_settings = settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true',
       :enable_project_level_control => 'true'
@@ -249,5 +257,36 @@ class MailPatchTest < ActiveSupport::TestCase
       assert_equal 3, mail.attachments.size
     end
   end
+  
+#  def test_add__att_nabled_true__att_all_false__prj_lve_true__prj_enabled
+#    ActionMailer::Base.deliveries.clear
+#    issue, = generate_issue_with_attachment_001
+#    
+#    plugin_settings = settings_init({
+#      :enable_mail_attachments => 'true',
+#      :attach_all_to_notification => 'false',
+#      :enable_project_level_control => 'false',
+#      :field_name_to_enable_att => 'aField'
+#    })
+#    
+#    cf = IssueCustomField.new(:name => 'regexp', :field_format => 'text', :regexp => '[a-z0-9')
+#    
+#    # enable project module of plugin
+#    pj = Project.find(1)
+#    pj.enable_module!(:issue_mail_with_attachments_plugin)
+#    pj.save
+#    
+#    with_settings( {:notified_events => %w(issue_added issue_updated),
+#      :plugin_issue_mail_with_attachments => plugin_settings
+#    }) do
+#      assert issue.save
+#      assert_equal 1, ActionMailer::Base.deliveries.size
+#      mail = ActionMailer::Base.deliveries.last
+#      assert_equal 3, mail.attachments.size
+#    end
+#  end
+  
+  
+  
   
 end
