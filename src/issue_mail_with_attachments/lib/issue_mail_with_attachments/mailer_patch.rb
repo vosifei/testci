@@ -43,7 +43,8 @@ module IssueMailWithAttachments
       #=========================================================
 
       def retrieve_plugin_seting(name)
-        return Setting.plugin_issue_mail_with_attachments[name]
+        s = Setting.plugin_issue_mail_with_attachments[name]
+		return s
       end
 
       #=========================================================
@@ -91,7 +92,7 @@ module IssueMailWithAttachments
         ps.mod_enabled = mod_enabled
         ps.cf_name_for_issue = cf_name_for_issue
         ps.enabled_for_issue = enabled_for_issue
-        ps
+        return ps
       end
       
       class Hoge
