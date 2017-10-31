@@ -39,15 +39,6 @@ module IssueMailWithAttachments
       end
 
       #=========================================================
-      # helper method to retrieve a plugin setting
-      #=========================================================
-
-      def retrieve_plugin_seting(name)
-        s = Setting.plugin_issue_mail_with_attachments[name]
-		return s
-      end
-
-      #=========================================================
       # helper class to store arguments
       #=========================================================
       class PluginSettings
