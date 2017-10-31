@@ -20,7 +20,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
   def setup
   end
   
-  def generate_issue_with_attachment_001(num=3)
+  def generate_data_with_attachment_001(num=3)
     
     att_files = [
       ["testfile.txt", "text/plain"],
@@ -47,9 +47,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     return issue, atts
   end
   
-  def test_add__att_enabled_true__attach_all_false
+  def test__att_enabled_true__attach_all_false
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001 1
+    issue, = generate_data_with_attachment_001 1
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -64,9 +64,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_true__attach_all_true
+  def test__att_enabled_true__attach_all_true
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -81,9 +81,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_false__att_all_false
+  def test__att_enabled_false__att_all_false
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'false',
@@ -98,9 +98,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_false__att_all_true
+  def test__att_enabled_false__att_all_true
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'false',
@@ -115,9 +115,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_true__att_all_false__prj_lve_true__prj_disabled
+  def test__att_enabled_true__att_all_false__prj_lve_true__prj_disabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -133,9 +133,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_true__att_all_false__prj_lve_true__prj_enabled
+  def test__att_enabled_true__att_all_false__prj_lve_true__prj_enabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001 2
+    issue, = generate_data_with_attachment_001 2
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -156,9 +156,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_true__att_all_true__prj_lve_true__prj_disabled
+  def test__att_enabled_true__att_all_true__prj_lve_true__prj_disabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -174,9 +174,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
 
-  def test_add__att_enabled_true__att_all_true__prj_lve_true__prj_enabled
+  def test__att_enabled_true__att_all_true__prj_lve_true__prj_enabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -197,9 +197,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__cf_enabled__cv_1
+  def test__att_enabled_true__att_all_false__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001 3
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001 3
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -207,8 +209,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :field_name_to_enable_att => 'aTestField'
     })
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 1 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -219,9 +219,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__cf_enabled__cv_0
+  def test__att_enabled_true__att_all_false__cf_enabled__cv_0
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -229,8 +231,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :field_name_to_enable_att => 'aTestField'
     })
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 0 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -242,9 +242,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
   end
 
   
-  def test_add__att_enabled_true__att_all_false__cf_enabled__cv_default
+  def test__att_enabled_true__att_all_false__cf_enabled__cv_default
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -252,8 +254,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :field_name_to_enable_att => 'aTestField'
     })
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
@@ -263,9 +263,9 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__cf_enabled__cv_not_defined
+  def test__att_enabled_true__att_all_false__cf_enabled__cv_not_defined
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001 1
+    issue, = generate_data_with_attachment_001 1
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -281,9 +281,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
+  def test__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001 2
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001 2
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -297,8 +299,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
     pj.enable_module!(:issue_mail_with_attachments_plugin)
     pj.save
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 1 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -309,9 +309,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__prj_lve_true__prj_disabled__cf_enabled__cv_1
+  def test__att_enabled_true__att_all_false__prj_lve_true__prj_disabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -320,8 +322,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :field_name_to_enable_att => 'aTestField'
     })
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 1 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -332,9 +332,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_0
+  def test__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_0
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -348,8 +350,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
     pj.enable_module!(:issue_mail_with_attachments_plugin)
     pj.save
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 0 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -360,9 +360,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
+  def test__att_enabled_true__att_all_true__prj_lve_true__prj_enabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
@@ -376,8 +378,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
     pj.enable_module!(:issue_mail_with_attachments_plugin)
     pj.save
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 1 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -388,9 +388,11 @@ class MailPatchAddTest < ActiveSupport::TestCase
     end
   end
   
-  def test_add__att_enabled_false__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
+  def test__att_enabled_false__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    issue, = generate_issue_with_attachment_001
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf.save
+    issue, = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'false',
@@ -404,8 +406,6 @@ class MailPatchAddTest < ActiveSupport::TestCase
     pj.enable_module!(:issue_mail_with_attachments_plugin)
     pj.save
     
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
-    cf.save
     issue.custom_field_values = { cf.id => 1 }
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -418,4 +418,5 @@ class MailPatchAddTest < ActiveSupport::TestCase
   
 
   
+
 end

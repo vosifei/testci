@@ -83,7 +83,7 @@ module IssueMailWithAttachments
         ps.mod_enabled = mod_enabled
         ps.cf_name_for_issue = cf_name_for_issue
         ps.enabled_for_issue = enabled_for_issue
-        return ps
+        ps
       end
       
       class Hoge
