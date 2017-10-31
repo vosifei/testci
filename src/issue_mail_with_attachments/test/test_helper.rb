@@ -1,4 +1,4 @@
- Coveralls configuration
+# Coveralls configuration
 require 'simplecov'
 require 'coveralls'
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
