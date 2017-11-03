@@ -33,7 +33,7 @@ module IssueMailWithAttachments
       #=========================================================
       # helper method to retrieve plugin setting
       #=========================================================
-      def retrieve_and_eval_plugin_seting(issue, name)
+      def retrieve_and_eval_plugin_seting(issue, name, attachment=nil, journal=nil, journal_detail=nil)
         v = retrieve_plugin_seting(name)
         return eval("\"#{v}\"")
       end
@@ -85,10 +85,6 @@ module IssueMailWithAttachments
         ps.enabled_for_issue = enabled_for_issue
         ps
       end
-      
-      class Hoge
-  attr_accessor :foo
-end
 
       #=========================================================
       # helper method to evaluate mail with attachment or not
@@ -101,6 +97,7 @@ end
         Rails.logger.debug "****  with_att:#{with_att}, att_enabled: #{ps.att_enabled}, attach_all: #{ps.attach_all}, mod_enabled: #{ps.mod_enabled}, prj_ctl_enabled: #{ps.prj_ctl_enabled}, cf_name_for_issue: #{ps.cf_name_for_issue}, enabled_for_issue: #{ps.enabled_for_issue}"
         return with_att
       end
+      module_function :evaluate_attach_or_not   # for unit testing
       
       #=========================================================
       # send with dedicated mail
@@ -163,15 +160,14 @@ end
         # send each files on dedicated mails
         #------------------------------------------------------------
         if ps.attach_all == false and with_att == true
-          # plugin setting value: mail subject for attachment
-          title2 = retrieve_plugin_seting('mail_subject_4_attachment')
-          title2 = eval("\"#{title2}\"")
 
           # send mail with attachments
           #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
               Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
+              # plugin setting value: mail subject for attachment
+              title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment=attachment)
               ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
             end
           #end
@@ -204,20 +200,20 @@ end
         #------------------------------------------------------------
         if ps.attach_all == true and with_att == true
           #unless Setting.plain_text_mail?
-            journal.details.each do |detail|
-              if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
+            journal.details.each do |journal_detail|
+              if journal_detail.property == 'attachment' && attachment = Attachment.find_by_id(journal_detail.prop_key)
                 Rails.logger.debug "***  att with notification: #{attachment.filename}"
-                attachments[attachment.filename] = File.binread(attachment.diskfile)
+               attachments[attachment.filename] = File.binread(attachment.diskfile)
               end
             end
           #end
         end
         if journal.new_value_for('status_id')
           # plugin setting value: mail subject
-          title = retrieve_and_eval_plugin_seting(issue, 'mail_subject')
+          title = retrieve_and_eval_plugin_seting(issue, 'mail_subject', journal=journal)
         else
           # plugin setting value: mail subject without status
-          title = retrieve_and_eval_plugin_seting(issue, 'mail_subject_wo_status')
+          title = retrieve_and_eval_plugin_seting(issue, 'mail_subject_wo_status', journal=journal)
         end
         #-----------
         # mail
@@ -229,17 +225,15 @@ end
         # send each files on dedicated mails
         #------------------------------------------------------------
         if ps.attach_all == false and with_att == true
-          # plugin setting value: mail subject for attachment
-          title2 = retrieve_plugin_seting('mail_subject_4_attachment')
-          title2 = eval("\"#{title2}\"")
-#          ss = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| "
 
           # send mail with attachments
           #unless Setting.plain_text_mail?
-            journal.details.each do |detail|
-              if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
+            journal.details.each do |journal_detail|
+              if journal_detail.property == 'attachment' && attachment = Attachment.find_by_id(journal_detail.prop_key)
                 Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
+                # plugin setting value: mail subject for attachment
+                title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment=attachment, journal=journal, journal_detail=journal_detail)
                 ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
               end
             end

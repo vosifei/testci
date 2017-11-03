@@ -18,6 +18,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
            :attachments
 
   def setup
+    @default_title_wo_status = false
   end
   
   def generate_data_with_attachment_001(num=3)
@@ -49,98 +50,122 @@ class MailPatchAddTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__attach_all_false
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001 1
+    issue, atts = generate_data_with_attachment_001 1
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
-      :attach_all_to_notification => 'false'
+      :attach_all_to_notification => 'false',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_dedicated_mails 1
+      assert_sent_with_dedicated_mails num_att_mails:1, atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_true__attach_all_true
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
-      :attach_all_to_notification => 'true'
+      :attach_all_to_notification => 'true',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_attach_all
+      assert_sent_with_attach_all atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_false__att_all_false
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'false',
-      :attach_all_to_notification => 'false'
+      :attach_all_to_notification => 'false',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_false__att_all_true
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'false',
-      :attach_all_to_notification => 'true'
+      :attach_all_to_notification => 'true',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_true__att_all_false__prj_lve_true__prj_disabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
-      :enable_project_level_control => 'true'
+      :enable_project_level_control => 'true',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_true__att_all_false__prj_lve_true__prj_enabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001 2
+    issue, atts = generate_data_with_attachment_001 2
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
-      :enable_project_level_control => 'true'
+      :enable_project_level_control => 'true',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     # enable project module of plugin
@@ -152,36 +177,44 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_dedicated_mails 2
+      assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_true__att_all_true__prj_lve_true__prj_disabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true',
-      :enable_project_level_control => 'true'
+      :enable_project_level_control => 'true',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
   def test__att_enabled_true__att_all_true__prj_lve_true__prj_enabled
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true',
-      :enable_project_level_control => 'true'
+      :enable_project_level_control => 'true',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     # enable project module of plugin
@@ -193,7 +226,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_attach_all
+      assert_sent_with_attach_all atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -201,12 +234,16 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001 3
+    issue, atts = generate_data_with_attachment_001 3
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     issue.custom_field_values = { cf.id => 1 }
@@ -215,7 +252,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_dedicated_mails 3
+      assert_sent_with_dedicated_mails num_att_mails:3, atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -223,12 +260,16 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     issue.custom_field_values = { cf.id => 0 }
@@ -237,7 +278,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
 
@@ -246,12 +287,16 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     
@@ -259,25 +304,29 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
   def test__att_enabled_true__att_all_false__cf_enabled__cv_not_defined
     ActionMailer::Base.deliveries.clear
-    issue, = generate_data_with_attachment_001 1
+    issue, atts = generate_data_with_attachment_001 1
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_dedicated_mails 1
+      assert_sent_with_dedicated_mails num_att_mails:1, atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -285,13 +334,17 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001 2
+    issue, atts = generate_data_with_attachment_001 2
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name} |attach| '
     })
     
     # enable project module of plugin
@@ -305,7 +358,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_dedicated_mails 2
+      assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -313,13 +366,17 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     issue.custom_field_values = { cf.id => 1 }
@@ -328,7 +385,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -336,13 +393,17 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
     })
     
     # enable project module of plugin
@@ -356,7 +417,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -364,13 +425,17 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true',
       :enable_project_level_control => 'true',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name} |attach| '
     })
     
     # enable project module of plugin
@@ -384,7 +449,7 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_attach_all
+      assert_sent_with_attach_all atts:atts, issue:issue, title_wo_status:@default_title_wo_status
     end
   end
   
@@ -392,13 +457,17 @@ class MailPatchAddTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries.clear
     cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
     cf.save
-    issue, = generate_data_with_attachment_001
+    issue, atts = generate_data_with_attachment_001
     
     plugin_settings = plugin_settings_init({
       :enable_mail_attachments => 'false',
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true',
-      :field_name_to_enable_att => 'aTestField'
+      :field_name_to_enable_att => 'aTestField',
+      
+      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name}',
+      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name}',
+      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject} in (#{issue.priority.name}) by #{issue.author.name} |attach| '
     })
     
     # enable project module of plugin
@@ -407,16 +476,13 @@ class MailPatchAddTest < ActiveSupport::TestCase
     pj.save
     
     issue.custom_field_values = { cf.id => 1 }
-    
+
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
-      assert_sent_with_no_attachments
+      assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status
     end
   end
-  
-
-  
 
 end
