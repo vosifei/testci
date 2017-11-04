@@ -51,7 +51,7 @@ class IssuesControllerTest < Redmine::ControllerTest
     User.current = nil
   end
 
-  def test_post_create_with_attachment
+  def test_mailer_patch_post_create_with_attachment
     ActionMailer::Base.deliveries.clear
     set_tmp_attachments_directory
     @request.session[:user_id] = 2
