@@ -31,7 +31,7 @@ class MailPatchEditStatusTest < ActiveSupport::TestCase
       ["japanese-utf-8.txt", "text/plain"]
       ]
 
-    journals = []
+    journal = issue.init_journal(user, issue)
     atts = []
     (0..num -1).each do |idx|
       att = Attachment.new(
@@ -40,12 +40,10 @@ class MailPatchEditStatusTest < ActiveSupport::TestCase
                      )
       assert att.save
       atts << att
-      journal = issue.init_journal(user, issue)
       journal.journalize_attachment(att, :added)
-      journals << journal
     end
 
-    return issue, atts, journals
+    return issue, atts, journal
   end
   
   def test__att_enabled_true__attach_all_false

@@ -25,17 +25,20 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
     (1..(num_att_mails)).each do |r|
       m = ActionMailer::Base.deliveries[-r]
       assert_equal 1, m.attachments.size
-      if atts
+      if atts and issue
+#        p atts[num_att_mails - r].filename
         assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_4_attachment]}\"") + atts[num_att_mails - r].filename, m.subject
       end
     end
     
     m = ActionMailer::Base.deliveries[-(num_att_mails +1)]
     assert_equal 0, m.attachments.size
-    if title_wo_status
-      assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]}\""), m.subject 
-    else
-      assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
+    if issue
+      if title_wo_status
+        assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]}\""), m.subject 
+      else
+        assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
+      end
     end
   end
   
@@ -43,10 +46,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
       assert_equal 1, ActionMailer::Base.deliveries.size
       m = ActionMailer::Base.deliveries.last
       assert_equal 3, m.attachments.size
-      if title_wo_status
-        assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]}\""), m.subject 
-      else
-        assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
+      if issue
+        if title_wo_status
+          assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]}\""), m.subject 
+        else
+          assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
+        end
       end
   end
 
@@ -54,11 +59,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
       assert_equal 1, ActionMailer::Base.deliveries.size
       m = ActionMailer::Base.deliveries.last
       assert_equal 0, m.attachments.size
+      if issue
         if title_wo_status
-        assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]}\""), m.subject 
-      else
-        assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
-      end    
+          assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]}\""), m.subject 
+        else
+          assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
+        end
+      end
   end
   
   def plugin_settings_init(raw_settings)
