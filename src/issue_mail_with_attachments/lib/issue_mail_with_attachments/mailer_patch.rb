@@ -33,7 +33,7 @@ module IssueMailWithAttachments
       #=========================================================
       # helper method to retrieve plugin setting
       #=========================================================
-      def retrieve_and_eval_plugin_seting(issue:, name:, attachment:nil, journal:nil, journal_detail:nil)
+      def retrieve_and_eval_plugin_seting(issue, name, attachment:nil, journal:nil, journal_detail:nil)
         v = retrieve_plugin_seting(name)
         return eval("\"#{v}\"")
       end
@@ -147,7 +147,7 @@ module IssueMailWithAttachments
           #end
         end
         # plugin setting value: mail subject
-        title = retrieve_and_eval_plugin_seting(issue:issue, name:'mail_subject')
+        title = retrieve_and_eval_plugin_seting(issue, 'mail_subject')
 
         #-----------
         # mail
@@ -167,7 +167,7 @@ module IssueMailWithAttachments
               Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
               # plugin setting value: mail subject for attachment
-              title2 = retrieve_and_eval_plugin_seting(issue:issue, name:'mail_subject_4_attachment', attachment:attachment)
+              title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment)
              ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
             end
           #end
@@ -210,10 +210,10 @@ module IssueMailWithAttachments
         end
         if journal.new_value_for('status_id')
           # plugin setting value: mail subject
-         title = retrieve_and_eval_plugin_seting(issue:issue, name:'mail_subject', journal:journal)
+         title = retrieve_and_eval_plugin_seting(issue, 'mail_subject', journal:journal)
         else
           # plugin setting value: mail subject without status
-         title = retrieve_and_eval_plugin_seting(issue:issue, name:'mail_subject_wo_status', journal:journal)
+         title = retrieve_and_eval_plugin_seting(issue, 'mail_subject_wo_status', journal:journal)
         end
         #-----------
         # mail
@@ -233,7 +233,7 @@ module IssueMailWithAttachments
                 Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
                 # plugin setting value: mail subject for attachment
-              title2 = retrieve_and_eval_plugin_seting(issue:issue, name:'mail_subject_4_attachment', attachment:attachment, journal:journal, journal_detail:journal_detail)
+              title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment, journal:journal, journal_detail:journal_detail)
                 ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
               end
             end
