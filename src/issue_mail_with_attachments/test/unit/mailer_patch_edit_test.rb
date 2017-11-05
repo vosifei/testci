@@ -230,7 +230,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_false__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001 3
     
@@ -256,7 +256,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_false__cf_enabled__cv_0
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001
     
@@ -283,7 +283,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_false__cf_enabled__cv_default
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001
     
@@ -330,7 +330,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001 2
     
@@ -362,7 +362,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_false__prj_lve_true__prj_disabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001
     
@@ -389,7 +389,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_0
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001
     
@@ -421,7 +421,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_true__att_all_true__prj_lve_true__prj_enabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001
     
@@ -453,7 +453,7 @@ class MailPatchEditTest < ActiveSupport::TestCase
   
   def test__att_enabled_false__att_all_false__prj_lve_true__prj_enabled__cf_enabled__cv_1
     ActionMailer::Base.deliveries.clear
-    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool')
+    cf = IssueCustomField.generate!(:name => 'aTestField', :field_format => 'bool', :is_for_all => true, :tracker_ids => Tracker.all.ids)
     cf.save
     issue, atts = generate_data_with_attachment_001
     
