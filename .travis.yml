@@ -23,7 +23,6 @@ script:
   - bash -x ./.travis-init.sh -r || exit 1
   - bash -x ./.travis-init.sh -i || exit 1
   - bash -x ./.travis-init.sh -t || exit 1
-  - bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/ui/**/*_test.rb
   - bash -x ./.travis-init.sh -u || exit 1
 
 before_install:
