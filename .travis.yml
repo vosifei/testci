@@ -27,3 +27,6 @@ script:
 
 before_install:
   - "phantomjs --version"
+  
+before_script:
+  - phantomjs --webdriver=4444 >/dev/null 2>&1 & 
