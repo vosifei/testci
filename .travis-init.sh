@@ -66,7 +66,7 @@ run_tests() {
 
   script -e -c "RUBYOPT=-W0 bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
   #--- added for ui test ---
-  script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/#{ENV['NAME'] || '*'}/test/ui/**/*_test.rb NAME="$PLUGIN $VERBOSE
+  script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
 }
 
 uninstall() {
