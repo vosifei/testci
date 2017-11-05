@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-#  - 2.3
+  - 2.3
 #  - 2.2
 #  - 2.1
   - 2.0
@@ -9,7 +9,7 @@ branches:
     - master
     - onlyforpj
 env:
-#  - REDMINE_VERSION=3.4-stable VERBOSE=yes
+  - REDMINE_VERSION=3.4-stable VERBOSE=yes
 #  - REDMINE_VERSION=3.3-stable VERBOSE=yes
 #  - REDMINE_VERSION=3.2-stable VERBOSE=yes
 #  - REDMINE_VERSION=3.1-stable VERBOSE=yes
