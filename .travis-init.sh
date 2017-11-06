@@ -87,8 +87,8 @@ run_install() {
   cd $PATH_TO_REDMINE
 
   #--- added for ui test ---
-  sed '/capybara/d' ./Gemfile
-  sed '/selenium-webdriver/d' ./Gemfile
+  sed '/capybara/d' Gemfile
+  sed '/selenium-webdriver/d' Gemfile
 
   # create a link to the plugin, but avoid recursive link.
   if [ -L "$PATH_TO_PLUGINS/$PLUGIN" ]; then rm "$PATH_TO_PLUGINS/$PLUGIN"; fi
