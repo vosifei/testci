@@ -82,9 +82,12 @@ uninstall() {
 run_install() {
   # exit if install fails
   set -e
-
+  
   # cd to redmine folder
   cd $PATH_TO_REDMINE
+
+  #--- added for ui test ---
+  sed '/selenium-webdriver/d' Gemfile
 
   # create a link to the plugin, but avoid recursive link.
   if [ -L "$PATH_TO_PLUGINS/$PLUGIN" ]; then rm "$PATH_TO_PLUGINS/$PLUGIN"; fi
