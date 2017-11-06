@@ -3,5 +3,4 @@
 gem 'coveralls', require: false
 #gem 'simplecov', "~> 0.9.1", :require => false, :group => :test
 
-gem "capybara"
 gem 'selenium-webdriver', '~> 3.5'
