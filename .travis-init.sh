@@ -64,13 +64,15 @@ run_tests() {
     TRACE=--trace
   fi
 
+  echo "--- test start ------------------------"
   script -e -c "RUBYOPT=-W0 bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
   #--- added for ui test ---
-  if [[ "$REDMINE_VERSION" =~ ^(3.0|3.1)[\-\.] ]]; then
-    echo "bypass ui test for redmine 3.0 or 3.1"
-  else
-    script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
-  fi
+#  if [[ "$REDMINE_VERSION" =~ ^(3.0|3.1)[\-\.] ]]; then
+#    echo "bypass ui test for redmine 3.0 or 3.1"
+#  else
+#    echo "--- UI test start ------------------------"
+#    script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
+#  fi
 }
 
 uninstall() {
@@ -88,8 +90,11 @@ run_install() {
   set -e
 
   # cd to redmine folder
-  cd $PATH_TO_REDMINE
-
+  cd $PATH_TO_REDMINE	
+  
+  #mod ver in gemfile
+  sed -i -e 's/.*selenium.*/  gem \'selenium-webdriver\', \'3\.5\.2\'/' -e 's/.*capybara.*/  gem \'capybara\', \'2\.14\'/' ./Gemfile       
+  #'
   # create a link to the plugin, but avoid recursive link.
   if [ -L "$PATH_TO_PLUGINS/$PLUGIN" ]; then rm "$PATH_TO_PLUGINS/$PLUGIN"; fi
   ln -s "$PATH_TO_PLUGIN" "$PATH_TO_PLUGINS/$PLUGIN"
