@@ -93,7 +93,8 @@ run_install() {
   cd $PATH_TO_REDMINE	
   
   #mod ver in gemfile
-  sed -i -e "s/.*selenium.*/  gem \'selenium-webdriver\', \'2\.53\.4\'/" -e "s/.*capybara.*/  gem \'capybara\', \'2\.7\.1\'/" ./Gemfile       
+  sed -i -e "s/.*selenium.*/  gem \'selenium-webdriver\', \'2\.53\.4\'/" -e "s/.*capybara.*/  gem \'capybara\', \'2\.7\.1\'/" ./Gemfile
+  cat ./Gemfile
  
   # create a link to the plugin, but avoid recursive link.
   if [ -L "$PATH_TO_PLUGINS/$PLUGIN" ]; then rm "$PATH_TO_PLUGINS/$PLUGIN"; fi
