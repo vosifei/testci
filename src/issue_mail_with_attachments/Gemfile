@@ -1,4 +1,8 @@
 #source 'https://rubygems.org'
 
-gem 'coveralls', require: false
-#gem 'simplecov', "~> 0.9.1", :require => false, :group => :test
+group :test do
+	gem 'coveralls', require: false
+	#gem 'simplecov', "~> 0.9.1", :require => false, :group => :test
+	gem 'public_suffix', '~> 1.5', '>= 1.5.3'	# for site_prism
+	gem 'site_prism', 2.7
+end
