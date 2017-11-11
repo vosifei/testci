@@ -104,16 +104,7 @@ class Redmine::UiTest::IssuesTest < Redmine::UiTest::Base
       assert_equal "bbbb", pp.edit_mail_subject.value
       assert_equal "cccc", pp.edit_mail_subject_wo_status.value
       assert_equal "dddd", pp.edit_mail_subject_4_attachment.value
-      
-#      Setting.clear_cache
-#      assert_equal nil, Setting.plugin_issue_mail_with_attachments[:enable_mail_attachments]
-#      assert_equal 'true', Setting.plugin_issue_mail_with_attachments[:attach_all_to_notification]
-#      assert_equal 'true', Setting.plugin_issue_mail_with_attachments[:enable_project_level_control]
-#      assert_equal "aaaa", Setting.plugin_issue_mail_with_attachments[:field_name_to_enable_att]
-#      assert_equal "bbbb", Setting.plugin_issue_mail_with_attachments[:mail_subject]
-#      assert_equal "cccc", Setting.plugin_issue_mail_with_attachments[:mail_subject_wo_status]
-#      assert_equal "dddd", Setting.plugin_issue_mail_with_attachments[:mail_subject_4_attachment]
-      
+           
     ensure
       Setting.find_by(name: :plugin_issue_mail_with_attachments).destroy
       Setting.clear_cache
