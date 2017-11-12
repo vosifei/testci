@@ -1,4 +1,5 @@
 require File.expand_path('../../../../../test/ui/base', __FILE__)
+require File.expand_path('../../test_helper', __FILE__)
 
 # Page object of list of plugins page
 class ListOfPluginsPage < SitePrism::Page
@@ -8,9 +9,6 @@ end
 
 # Page object of issue mail with attachment plugin setting page
 class IssueMailAttPluginSettingPage < SitePrism::Page
-  DEFAULT_edit_mail_subject = '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}'
-  DEFAULT_edit_mail_subject_wo_status = '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}'
-  DEFAULT_edit_mail_subject_4_attachment = '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
   
   set_url '/settings/plugin/issue_mail_with_attachments'
   element :chk_att_enabled, "input[name='settings[enable_mail_attachments]']"
@@ -53,9 +51,9 @@ class Redmine::UiTest::IssuesTest < Redmine::UiTest::Base
     assert_equal false, pp.chk_attach_all.checked?
     assert_equal false, pp.chk_prj_ctl_enabled.checked?
     assert_equal "", pp.edit_cf_name_for_issue.value
-    assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject, pp.edit_mail_subject.value
-    assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject_wo_status, pp.edit_mail_subject_wo_status.value
-    assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject_4_attachment, pp.edit_mail_subject_4_attachment.value
+    assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject, pp.edit_mail_subject.value
+    assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status, pp.edit_mail_subject_wo_status.value
+    assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment, pp.edit_mail_subject_4_attachment.value
     
     begin
       pp.btn_apply.click
@@ -64,9 +62,9 @@ class Redmine::UiTest::IssuesTest < Redmine::UiTest::Base
       assert_equal false, pp.chk_attach_all.checked?
       assert_equal false, pp.chk_prj_ctl_enabled.checked?
       assert_equal "", pp.edit_cf_name_for_issue.value
-      assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject, pp.edit_mail_subject.value
-      assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject_wo_status, pp.edit_mail_subject_wo_status.value
-      assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject_4_attachment, pp.edit_mail_subject_4_attachment.value
+      assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject, pp.edit_mail_subject.value
+      assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status, pp.edit_mail_subject_wo_status.value
+      assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment, pp.edit_mail_subject_4_attachment.value
     ensure
       Setting.find_by(name: :plugin_issue_mail_with_attachments).destroy
       Setting.clear_cache
@@ -82,9 +80,9 @@ class Redmine::UiTest::IssuesTest < Redmine::UiTest::Base
     assert_equal false, pp.chk_attach_all.checked?
     assert_equal false, pp.chk_prj_ctl_enabled.checked?
     assert_equal "", pp.edit_cf_name_for_issue.value
-    assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject, pp.edit_mail_subject.value
-    assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject_wo_status, pp.edit_mail_subject_wo_status.value
-    assert_equal IssueMailAttPluginSettingPage::DEFAULT_edit_mail_subject_4_attachment, pp.edit_mail_subject_4_attachment.value
+    assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject, pp.edit_mail_subject.value
+    assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status, pp.edit_mail_subject_wo_status.value
+    assert_equal IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment, pp.edit_mail_subject_4_attachment.value
 
     pp.chk_att_enabled.set(false)
     pp.chk_attach_all.set(true)

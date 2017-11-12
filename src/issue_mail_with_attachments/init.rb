@@ -30,6 +30,7 @@ Redmine::Plugin.register :issue_mail_with_attachments do
   version '0.9.0'
   url 'http://www.redmine.org/plugins/issue_mail_with_attachments'
   author_url 'https://github.com/team888'
+  requires_redmine :version_or_higher => '3.0'
 
   settings :default => default_settings, :partial => 'settings/issue_mail_with_attachments_settings'
   

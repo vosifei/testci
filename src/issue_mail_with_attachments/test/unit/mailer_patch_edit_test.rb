@@ -54,9 +54,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'false',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -75,9 +75,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :enable_mail_attachments => 'true',
       :attach_all_to_notification => 'true',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -96,9 +96,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :enable_mail_attachments => 'false',
       :attach_all_to_notification => 'false',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -117,9 +117,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :enable_mail_attachments => 'false',
       :attach_all_to_notification => 'true',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -139,9 +139,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -161,9 +161,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'false',
       :enable_project_level_control => 'true',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     # enable project module of plugin
@@ -188,9 +188,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'true',
       :enable_project_level_control => 'true',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -210,9 +210,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'true',
       :enable_project_level_control => 'true',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     # enable project module of plugin
@@ -239,9 +239,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'false',
       :field_name_to_enable_att => 'aTestField',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     issue.custom_field_values = { cf.id => 1 }
@@ -265,9 +265,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'false',
       :field_name_to_enable_att => 'aTestField',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     issue.custom_field_values = { cf.id => 0 }
@@ -292,9 +292,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'false',
       :field_name_to_enable_att => 'aTestField',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     
@@ -315,9 +315,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :attach_all_to_notification => 'false',
       :field_name_to_enable_att => 'aTestField',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     with_settings( {:notified_events => %w(issue_added issue_updated),
@@ -372,9 +372,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :enable_project_level_control => 'true',
       :field_name_to_enable_att => 'aTestField',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     issue.custom_field_values = { cf.id => 1 }
@@ -399,9 +399,9 @@ class MailPatchEditTest < ActiveSupport::TestCase
       :enable_project_level_control => 'true',
       :field_name_to_enable_att => 'aTestField',
       
-      :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-      :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-      :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+      :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+      :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+      :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
     })
     
     # enable project module of plugin

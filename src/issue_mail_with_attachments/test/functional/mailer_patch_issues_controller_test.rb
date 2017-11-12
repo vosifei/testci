@@ -62,9 +62,9 @@ if Redmine::VERSION::MAJOR >= 3 and Redmine::VERSION::MINOR >= 4
         :enable_mail_attachments => 'true',
         :attach_all_to_notification => 'false',
 
-        :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-        :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-        :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+        :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+        :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+        :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
       })
 
       with_settings( {:notified_events => %w(issue_added),
@@ -150,9 +150,9 @@ else
         :enable_mail_attachments => 'true',
         :attach_all_to_notification => 'false',
 
-        :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
-        :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
-        :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+        :mail_subject => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject,
+        :mail_subject_wo_status => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_wo_status,
+        :mail_subject_4_attachment => IssueMailWithAttPluginInfo::DEFAULT_edit_mail_subject_4_attachment
       })
 
       with_settings( {:notified_events => %w(issue_added),
