@@ -31,4 +31,4 @@ Japanese Configuration UI
 1. Manipulate Redmine issues as usual, issue attachment files are sent out with notification mails at the time of issue creation and update.
 
 ## Compatibility
-Redmine 2.6 to 3.4 ( checked on 2.6, 3.3 and 3.4.2 so far )
+Redmine 3.0 to 3.4
