@@ -1,15 +1,15 @@
 # Coveralls configuration
-#require 'simplecov'
-#require 'coveralls'
-#SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-#SimpleCov.start do
-#   add_filter do |source_file|
-#     !source_file.filename.include? "/plugins/"
-#   end
-#   add_filter '/lib/plugins/'
-#   add_filter '/db/'
-#end
-#Coveralls.wear!('rails')
+require 'simplecov'
+require 'coveralls'
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start do
+   add_filter do |source_file|
+     !source_file.filename.include? "/plugins/"
+   end
+   add_filter '/lib/plugins/'
+   add_filter '/db/'
+end
+Coveralls.wear!('rails')
 
 # Load the Redmine helper
 require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
@@ -75,3 +75,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
       return ActionController::Parameters.new(raw_settings)
     end
   end
+
+class IssueMailWithAttPluginInfo
+  DEFAULT_edit_mail_subject = '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}'
+  DEFAULT_edit_mail_subject_wo_status = '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}'
+  DEFAULT_edit_mail_subject_4_attachment = '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
+
+end
