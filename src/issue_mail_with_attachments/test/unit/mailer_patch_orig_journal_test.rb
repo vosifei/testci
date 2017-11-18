@@ -1,7 +1,7 @@
 
 require File.expand_path('../../test_helper', __FILE__)
 
-class MailPatchTest < ActiveSupport::TestCase
+class MailPatchEditOrigTest < ActiveSupport::TestCase
   include Redmine::I18n
   include Rails::Dom::Testing::Assertions
 
