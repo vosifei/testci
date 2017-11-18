@@ -65,7 +65,7 @@ run_tests() {
   fi
 
   echo "--- test start ------------------------"
-  script -e -c "RUBYOPT=-W0 bundle exec rake redmine:plugins:test NAME="$PLUGIN COVERALL4MYPLUGIN=true $VERBOSE
+  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
   #--- added for ui test ---
 #  if [[ "$REDMINE_VERSION" =~ ^(3.0|3.1)[\-\.] ]]; then
 #    echo "bypass ui test for redmine 3.0 or 3.1"
