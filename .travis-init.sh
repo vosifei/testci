@@ -71,7 +71,7 @@ run_tests() {
 #    echo "bypass ui test for redmine 3.0 or 3.1"
 #  else
     echo "--- UI test start ------------------------"
-#    script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
+    script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
 #  fi
 }
 
