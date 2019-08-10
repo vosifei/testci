@@ -8,6 +8,7 @@ branches:
   only:
     - master
     - onlyforpj
+    - ver4support
 env:
   - REDMINE_VERSION=3.4-stable VERBOSE=yes
   - REDMINE_VERSION=3.3-stable VERBOSE=yes
