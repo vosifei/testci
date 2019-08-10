@@ -94,6 +94,7 @@ run_install() {
   
   #mod ver in gemfile
   sed -i -e "/public_suffix/d" -e "s/.*selenium.*/  gem \'selenium-webdriver\', \'2\.53\.4\'/" -e "s/.*capybara.*/  gem \'capybara\', \'2\.7\.1\'/" ./Gemfile
+  set -i -e "s/.*gem \"sqlite3\", :platforms => \[:mri, :mingw, :x64_mingw\].*/        gem \"sqlite3\", \(RUBY_VERSION < \"2.0\" && RUBY_PLATFORM =~ \/mingw\/ \? \"1.3.12\" : \"~>1.3.12\"\),:platforms => \[:mri, :mingw, :x64_mingw\]/" ./Gemfile
   cat ./Gemfile
  
   # create a link to the plugin, but avoid recursive link.
