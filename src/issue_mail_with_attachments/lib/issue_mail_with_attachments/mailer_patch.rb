@@ -134,13 +134,14 @@ module IssueMailWithAttachments
       #=========================================================
       # monkey patch for issue_add method of Mailer class
       #=========================================================
-      def issue_add(issue, to_users, cc_users)
+      def issue_add(to_users, issue)
         prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_add_with_attachments ------"
+        cc_users = nil
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
-        ml = super(issue, to_users, cc_users)
+        ml = super(to_users, issue)
 
         #------------------------------------------------------------
         # evaluate plugin settings
@@ -191,13 +192,14 @@ module IssueMailWithAttachments
       #=========================================================
       # monkey patch for issue_edit method of Mailer class
       #=========================================================
-      def issue_edit(journal, to_users, cc_users)
+      def issue_edit(to_users, journal)
         prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_edit_with_attachments ------"
+        cc_users = nil
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
-        ml = super(journal, to_users, cc_users)
+        ml = super(to_users, journal)
         issue = journal.journalized
 
         #------------------------------------------------------------
