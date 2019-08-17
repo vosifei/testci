@@ -12,7 +12,7 @@ env:
 
 addons:
   firefox: latest-esr
-
+  chrome: stable
 script:
   - export PLUGIN=issue_mail_with_attachments
   - export WORKSPACE=$(pwd)/workspace
@@ -31,6 +31,12 @@ before_install:
  - export PATH=$PATH:$PWD/geckodriver
  - geckodriver --version
  - export MOZ_HEADLESS=1
+ 
+ - export LATEST_CHROMEDRIVER="$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)"
+ - curl -L -s -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${LATEST_CHROMEDRIVER}/chromedriver_linux64.zip"
+ - mkdir chromedriver
+ - unzip /tmp/chromedriver.zip -d chromedriver"
+ - export PATH=$PATH:$PWD/chromedriver
   
 before_script:
 
