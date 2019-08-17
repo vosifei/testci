@@ -74,7 +74,7 @@ run_tests() {
   #script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:integration NAME="$PLUGIN $VERBOSE
 
   echo "--- UI test start ------------------------"
-  script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
+  script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
 }
 
 uninstall() {
