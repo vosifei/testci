@@ -10,6 +10,9 @@ branches:
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
 
+addons:
+  firefox: latest
+
 script:
   - export PLUGIN=issue_mail_with_attachments
   - export WORKSPACE=$(pwd)/workspace
