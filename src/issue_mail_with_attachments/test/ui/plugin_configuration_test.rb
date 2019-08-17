@@ -25,7 +25,7 @@ class IssueMailAttPluginSettingPage < SitePrism::Page
 end
 
 class IssuesTest < ApplicationSystemTestCase
-  driven_by :selenium, using: :firefox
+#  driven_by :selenium, using: :firefox
   
   fixtures :projects, :users, :email_addresses, :roles, :members, :member_roles,
            :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
