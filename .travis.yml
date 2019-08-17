@@ -37,6 +37,7 @@ before_install:
  - mkdir chromedriver
  - unzip /tmp/chromedriver.zip -d chromedriver
  - export PATH=$PATH:$PWD/chromedriver
-  
+ - chromedriver --version
+ - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 before_script:
 
