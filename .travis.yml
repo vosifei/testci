@@ -2,8 +2,6 @@ language: ruby
 rvm:
   - 2.3
   - 2.2
-  - 2.1
-  - 2.0
 branches:
   only:
     - master
@@ -11,11 +9,7 @@ branches:
     - ver4support
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
-#  - REDMINE_VERSION=3.4-stable VERBOSE=yes
-#  - REDMINE_VERSION=3.3-stable VERBOSE=yes
-#  - REDMINE_VERSION=3.2-stable VERBOSE=yes
-#  - REDMINE_VERSION=3.1-stable VERBOSE=yes
-#  - REDMINE_VERSION=3.0-stable VERBOSE=yes
+
 script:
   - export PLUGIN=issue_mail_with_attachments
   - export WORKSPACE=$(pwd)/workspace
