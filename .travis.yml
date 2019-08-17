@@ -36,7 +36,7 @@ before_install:
  - curl -L -s -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${LATEST_CHROMEDRIVER}/chromedriver_linux64.zip"
  - mkdir chromedriver
  - unzip /tmp/chromedriver.zip -d chromedriver
- - export PATH=$PATH:$PWD/geckodriver
+ - export PATH=$PATH:$PWD/chromedriver
   
 before_script:
 
