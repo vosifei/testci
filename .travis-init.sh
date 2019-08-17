@@ -93,7 +93,7 @@ run_install() {
   cd $PATH_TO_REDMINE	
   
   #mod ver in gemfile
-  sed -i -e "/public_suffix/d" -e "s/.*selenium.*/  gem \'selenium-webdriver\', \'2\.53\.4\'/" ./Gemfile
+  sed -i -e "/public_suffix/d" ./Gemfile
   cat ./Gemfile
  
   # create a link to the plugin, but avoid recursive link.
