@@ -2,6 +2,8 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class MailPatchAddTest < ActiveSupport::TestCase
+  self.test_order = :sorted
+
   include Redmine::I18n
   include Rails::Dom::Testing::Assertions
 
