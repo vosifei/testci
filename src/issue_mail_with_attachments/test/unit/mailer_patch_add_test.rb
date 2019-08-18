@@ -2,9 +2,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class MailPatchAddTest < ActiveSupport::TestCase
-
-  self.test_order = :defined
-
   include Redmine::I18n
   include Rails::Dom::Testing::Assertions
 
@@ -72,6 +69,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_dedicated_mails num_att_mails:1, atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -93,6 +92,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_attach_all atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -114,6 +115,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -135,6 +138,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -157,6 +162,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -184,6 +191,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -206,6 +215,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -233,6 +244,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_attach_all atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -259,6 +272,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_dedicated_mails num_att_mails:3, atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -285,6 +300,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -311,6 +328,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -333,6 +352,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_dedicated_mails num_att_mails:1, atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -365,6 +386,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -392,6 +415,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -424,6 +449,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -456,6 +483,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_attach_all atts:atts, issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
@@ -488,6 +517,8 @@ class MailPatchAddTest < ActiveSupport::TestCase
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
       assert issue.save
+	  
+	  p ActionMailer::Base.deliveries
       assert_sent_with_no_attachments issue:issue, title_wo_status:@default_title_wo_status, recipients:["dlopper@somenet.foo", "jsmith@somenet.foo"]
     end
   end
