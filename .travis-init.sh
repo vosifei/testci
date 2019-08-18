@@ -64,14 +64,17 @@ run_tests() {
     TRACE=--trace
   fi
 
-  echo "--- unit test start ------------------------"
+  echo "--- test start ------------------------"
+  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
+
+#  echo "--- unit test start ------------------------"
 #  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
 
-  echo "--- function test start ------------------------"
+#  echo "--- function test start ------------------------"
 #  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:functionals NAME="$PLUGIN $VERBOSE
 
-  echo "--- integration test start ------------------------"
-  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:integration NAME="$PLUGIN $VERBOSE
+#  echo "--- integration test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:integration NAME="$PLUGIN $VERBOSE
 
   echo "--- UI test start ------------------------"
   script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
