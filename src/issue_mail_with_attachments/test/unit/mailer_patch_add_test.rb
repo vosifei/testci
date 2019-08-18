@@ -21,6 +21,10 @@ class MailPatchAddTest < ActiveSupport::TestCase
     @default_title_wo_status = false
   end
   
+  def teardown
+    User.current = nil
+  end
+  
   def generate_data_with_attachment_001(num=3)
     
     att_files = [
