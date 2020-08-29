@@ -71,6 +71,7 @@ run_tests() {
 #  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
 #   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/*_test.rb"
 #   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_add_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true ruby -I test plugins/issue_mail_with_attachments/test/unit/mailer_patch_add_test.rb"
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_edit_status_test.rb"
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_edit_test.rb"
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_orig_issue_test.rb"
