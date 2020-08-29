@@ -4,7 +4,7 @@ rvm:
   - 2.5
   - 2.4
   - 2.3
-  - 2.2
+
 branches:
   only:
     - master
@@ -12,6 +12,7 @@ branches:
     - ver4support
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
+  - REDMINE_VERSION=4.1-stable VERBOSE=yes
 
 addons:
   firefox: latest-esr
