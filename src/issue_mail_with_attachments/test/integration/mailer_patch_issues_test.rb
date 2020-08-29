@@ -103,7 +103,6 @@ class MailerPatchIssuesTest < Redmine::IntegrationTest
     atts = []
     atts <<  Attachment.new(:file => files[0])
     atts <<  Attachment.new(:file => files[1])
-    p ActionMailer::Base.deliveries
     assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:Issue.find(issue.id), title_wo_status:false, recipients:["jsmith@somenet.foo", "dlopper@somenet.foo"]
 
     #===============
@@ -134,7 +133,6 @@ class MailerPatchIssuesTest < Redmine::IntegrationTest
       # verify that the attachment was written to disk
       assert File.exist?(attachments[1].diskfile)
       
-      p ActionMailer::Base.deliveries
       assert_sent_with_dedicated_mails num_att_mails:2, atts:attachments, issue:Issue.find(issue.id), title_wo_status:true, recipients:["jsmith@somenet.foo", "dlopper@somenet.foo"]
     end
     
