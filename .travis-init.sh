@@ -64,17 +64,20 @@ run_tests() {
     TRACE=--trace
   fi
 
-  echo "--- test start ------------------------"
-  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
+#  echo "--- test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
 
-#  echo "--- unit test start ------------------------"
+  echo "--- unit test start ------------------------"
 #  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/*_test.rb"
 
-#  echo "--- function test start ------------------------"
-#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:functionals NAME="$PLUGIN $VERBOSE
+  echo "--- function test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/functional/*_test.rb"
 
-#  echo "--- integration test start ------------------------"
-#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:integration NAME="$PLUGIN $VERBOSE
+  echo "--- integration test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/integration/*_test.rb"
 
   echo "--- UI test start ------------------------"
   script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
