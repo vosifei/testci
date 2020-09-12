@@ -78,12 +78,12 @@ run_tests() {
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_add_test.rb"
 
   echo "--- function test start ------------------------"
-  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:functionals NAME="$PLUGIN $VERBOSE
-#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/functional/*_test.rb"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/functional/*_test.rb"
 
   echo "--- integration test start ------------------------"
-  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:integration NAME="$PLUGIN $VERBOSE
-#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/integration/*_test.rb"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/integration/*_test.rb"
 
   echo "--- UI test start ------------------------"
   script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
