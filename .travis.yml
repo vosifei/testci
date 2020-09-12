@@ -8,7 +8,7 @@ rvm:
 branches:
   only:
     - master
-    - onlyforpj
+    - trytest
     - ver4support
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
