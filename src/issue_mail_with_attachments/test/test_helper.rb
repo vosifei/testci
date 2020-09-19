@@ -12,7 +12,8 @@ if ENV['COVERALL4MYPLUGIN'] == 'true'
      add_filter '/db/'
      SimpleCov.command_name "Test #{Time.now}"
     end
-  Coveralls.wear_merged!('rails')
+  Coveralls.wear!('rails')
+  #Coveralls.wear_merged!('rails')
 end
 
 # Load the Redmine helper
