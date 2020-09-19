@@ -88,7 +88,7 @@ run_tests() {
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/integration/*_test.rb"
 
   echo "--- UI test start ------------------------"
-  script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
+  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
 
   # push to coveralls
   bundle exec rake coveralls:push
