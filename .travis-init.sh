@@ -89,6 +89,9 @@ run_tests() {
 
   echo "--- UI test start ------------------------"
   script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
+
+  # push to coveralls
+  bundle exec rake coveralls:push
 }
 
 uninstall() {
