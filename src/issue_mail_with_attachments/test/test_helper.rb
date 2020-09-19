@@ -11,7 +11,7 @@ if ENV['COVERALL4MYPLUGIN'] == 'true'
      add_filter '/lib/plugins/'
      add_filter '/db/'
   end
-  Coveralls.wear!('rails')
+  Coveralls.wear_merged!('rails')
 end
 
 # Load the Redmine helper
