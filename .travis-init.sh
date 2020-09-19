@@ -79,9 +79,6 @@ run_tests() {
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_test.rb"
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_add_test.rb"
 
-  # push to coveralls
-  bundle exec rake coveralls:push
-
   echo "--- function test start ------------------------"
 #  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
    script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/functional/*_test.rb"
@@ -92,6 +89,9 @@ run_tests() {
 
   echo "--- UI test start ------------------------"
   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
+
+  # push to coveralls
+  bundle exec rake coveralls:push
 }
 
 uninstall() {
