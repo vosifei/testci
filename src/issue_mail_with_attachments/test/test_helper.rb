@@ -10,7 +10,7 @@ if ENV['COVERALL4MYPLUGIN'] == 'true'
      end
      add_filter '/lib/plugins/'
      add_filter '/db/'
-     SimpleCov.command_name "Test #{Time.now}"
+     #SimpleCov.command_name "Test #{Time.now}"
     end
   Coveralls.wear!('rails')
   #Coveralls.wear_merged!('rails')
