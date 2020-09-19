@@ -4,14 +4,14 @@ if ENV['COVERALL4MYPLUGIN'] == 'true'
   require 'coveralls'
   SimpleCov.formatter = Coveralls::SimpleCov::Formatter
   #SimpleCov.merge_timeout 3600
-  SimpleCov.command_name = "PID #{$$}"
   SimpleCov.start do
      add_filter do |source_file|
        !source_file.filename.include? "/plugins/"
      end
      add_filter '/lib/plugins/'
      add_filter '/db/'
-  end
+     SimpleCov.command_name "Test #{Time.now}"
+    end
   Coveralls.wear_merged!('rails')
 end
 
