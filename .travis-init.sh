@@ -65,8 +65,8 @@ run_tests() {
   fi
 
   echo "--- test start ------------------------"
-  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
-#  script -e -c "RUBYOPT=-W0  COVERALL4MYPLUGIN=true xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/**/*_test.rb" $VERBOSE
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
+  script -e -c "RUBYOPT=-W0  COVERALL4MYPLUGIN=true xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/**/*_test.rb" $VERBOSE
 
 #  echo "--- unit test start ------------------------"
 #  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
