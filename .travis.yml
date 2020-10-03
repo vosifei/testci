@@ -9,6 +9,7 @@ branches:
   only:
     - master
     - trytest
+    - trytest2
     - ver4support
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
