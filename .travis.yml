@@ -14,6 +14,7 @@ branches:
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
   - REDMINE_VERSION=4.1-stable VERBOSE=yes
+  - REDMINE_VERSION=4.1.1 VERBOSE=yes
 
 addons:
   firefox: latest-esr
